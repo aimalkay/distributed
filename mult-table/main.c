@@ -1,3 +1,9 @@
+// SE4F03 Final Project
+// Aimal Khan
+// Sean McLellan
+
+// main.c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -6,6 +12,8 @@
 #include <stdbool.h>
 #include <time.h>
 #include "mpi.h"
+
+
 
 int main (int argc, char *argv[])
 {
