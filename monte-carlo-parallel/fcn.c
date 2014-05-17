@@ -1,4 +1,4 @@
-// Aimal Khan - 0946636 - SE4F03 Assignment 1 
+// Aimal Khan SE4F03 Assignment 1 
 
 // fcn.c
 

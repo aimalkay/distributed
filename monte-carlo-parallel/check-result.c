@@ -1,4 +1,4 @@
-// Aimal Khan - 0946636 - SE4F03 Assignment 1 
+// Aimal Khan SE4F03 Assignment 1 
 
 // check-result.c
 // This function will get replaced by marker in order to check result of the provided function.
