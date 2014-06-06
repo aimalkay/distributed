@@ -1,0 +1,81 @@
+# -------------------------
+# This makefile creates an executable MPI program called
+# julia using main.c, getparams.c, parallel-julia.c, 
+# partition-julia.c, master-julia.c, julia.c, and savebmp.c. 
+# It requires the math library.
+# ---------------------------------------------------------
+
+CC = mpicc
+CFLAGS=-g -Wall -O2 -qsmp=omp
+LDFLAGS = -I$(SCINET_bgqgcc_INC) -L$(SCINET_bgqgcc_LIB) -lgmp
+OFLAGS = -O3 -qarch=qp -qtune=qp
+
+OBJS =  main.o julia.o savebmp.o parallel-julia.o partition-julia.o master-julia.o getparams.o  
+
+julia: $(OBJS)
+	$(CC) -o julia $(OBJS) $(LDFLAGS)
+
+#--------------------------------------------------------------------------------------------------------
+# this runs are on Mac. On Linux, e.g. penguin, replace open by gthumb
+#--------------------------------------------------------------------------------------------------------
+# run0 is a test run
+#--------------------------------------------------------------------------------------------------------
+run0: 
+	mpirun -np 8 ./julia 1 -0.614 0.612 -1.1295 -1.1195 0.4053 0.4189 2000 2000 3000 image.bmp stats.txt; gthumb image.bmp
+
+#-------------------------------------------------------------------------------------------------------
+# run1 - run5 are the program calls required to create the images and statistics found in the images and stats directories
+#--------------------------------------------------------------------------------------------------------
+run1: julia
+	mpirun -np 8 ./julia 1 -0.595 0.5 -1.5 1.5 -0.95 0.95 1000 1000 55 image-1.bmp stats-1.txt ; gthumb image-1.bmp
+
+run2: julia
+	mpirun -np 8 ./julia 1 -0.4 0.6 -0.631862 -0.118138 0.149175 0.519175 1000 1000 2000 image-2.bmp stats-2.txt; gthumb image-2.bmp
+
+run3: julia
+	mpirun -np 8 ./julia 1 -.614 0.612 -1.1295 -1.1195 0.4053 0.4189 2000 2000 3000 image-3.bmp stats-3.txt; gthumb image-3.bmp
+
+run4: julia
+	mpirun -np 8 ./julia 1 -0.8 0.156 1.103 1.173 -0.330 -0.200 2000 2000 3000 image-4.bmp stats-4.txt; gthumb image-4.bmp
+
+run5: julia
+	mpirun -np 8 ./julia 0 0.0016 0.8224 -0.5485 -0.5532 -0.6241 -0.6293 1000 1000 4000 image-5.bmp stats-5.txt; gthumb image-5.bmp
+
+#--------------------------------------------------------------------------------------------------------
+# Additional images - not in images directory
+#--------------------------------------------------------------------------------------------------------
+runM64: julia
+	mpirun -np 64 ./julia 0 -0.4  0.6  -1 1 -1 1 1000 1000 1000 image-64.bmp stats.txt #; gthumb image.bmp
+
+runM32: julia
+	mpirun -np 32 ./julia 0 -0.4  0.6  -1 1 -1 1 1000 1000 1000 image-32.bmp stats.txt #; gthumb image.bmp
+
+runM16: julia
+	mpirun -np 16 ./julia 0 -0.4  0.6  -1 1 -1 1 1000 1000 1000 image-16.bmp stats.txt #; gthumb image.bmp
+
+runM5: 
+	mpirun -np 5 ./julia 0 -0.4  0.6  -1 1 -1 1 1000 1000 1000 image-4.bmp stats.txt #; gthumb image.bmp
+
+runM2:
+	mpirun -np 2 ./julia 0 -0.4  0.6  -1 1 -1 1 1000 1000 1000 image-2.bmp stats.txt #; gthumb image.bmp
+
+runML64: julia
+	mpirun -np 64 ./julia 0 -0.4  0.6  -1 1 -1 1 10000 10000 30000 image-L64.bmp stats.txt #; gthumb image.bmp
+
+runML32: julia
+	mpirun -np 32 ./julia 0 -0.4  0.6  -1 1 -1 1 10000 10000 30000 image-L32.bmp stats.txt #; gthumb image.bmp
+
+runML16: julia
+	mpirun -np 16 ./julia 0 -0.4  0.6  -1 1 -1 1 10000 10000 30000 image-L16.bmp stats.txt #; gthumb image.bmp
+
+runML5: 
+	mpirun -np 5 ./julia 0 -0.4  0.6  -1 1 -1 1 10000 10000 30000 image-L4.bmp stats.txt #; gthumb image.bmp
+
+runML2:
+	mpirun -np 2 ./julia 0 -0.4  0.6  -1 1 -1 1 10000 10000 30000 image-L2.bmp stats.txt #; gthumb image.bmp
+
+#--------------------------------------------------------------------------------------------------------
+# clean
+#--------------------------------------------------------------------------------------------------------
+clean:
+	@rm -rf $(OBJS) julia *~ *.bak *.bmp
